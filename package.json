@@ -1,5 +1,5 @@
 {
-  "name": "jest-html-reporters",
+  "name": "@florianbreier/jest-html-reporters",
   "version": "2.0.1",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "index.js",
@@ -16,16 +16,20 @@
     "report",
     "plugin"
   ],
-  "author": "Hazyzh",
+  "author": {
+    "name": "Florian Breier",
+    "email": "florian.breier@gmx.at"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hazyzh/jest-html-reporters.git"
+    "url": "git@florianbreier/winser.git"
   },
   "bugs": {
     "url": "https://github.com/Hazyzh/jest-html-reporters/issues"
   },
-  "homepage": "https://github.com/Hazyzh/jest-html-reporters#readme",
+  "homepage": "https://github.com/florianbreier/jest-html-reporters",
+  "private": false,
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
@@ -40,7 +44,7 @@
     "antd": "^4.3.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^9.0.0",
-    "babel-jest": "^23.4.2",
+    "babel-jest": "^26.1.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-import-separation": "^1.0.0",
     "clean-webpack-plugin": "^0.1.19",
@@ -78,12 +82,12 @@
     "recharts": "^1.2.0",
     "regenerator-runtime": "^0.12.1",
     "style-loader": "^0.23.0",
-    "uglifyjs-webpack-plugin": "^2.0.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^1.1.1",
     "webpack": "^4.17.1",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.7",
+    "webpack-dev-server": "^3.11.0",
     "@ant-design/icons": "^4.0.6"
   },
   "files": [
