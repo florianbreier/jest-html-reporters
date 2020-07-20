@@ -1,5 +1,4 @@
-const fs = require('fs')
-const fse = require('fs-extra')
+import * as fs from "fs";
 
 const path = require('path')
 const {getAttachDir, setAttachDir,getTempDir,setTempDir, readAttachInfos} = require('./helper')
@@ -79,16 +78,16 @@ class MyCustomReporter {
   initAttachDir() {
     this.removeTempDir()
     this.removeAttachDir()
-    fse.mkdirpSync(getTempDir())
-    fse.mkdirpSync(getAttachDir())
+    fs.mkdirSync(getTempDir(), {recursive: true})
+    fs.mkdirSync(getAttachDir(), {recursive: true})
   }
 
   removeTempDir() {
-    fse.removeSync(getTempDir())
+    fs.rmdirSync(getTempDir(), {recursive: true})
   }
 
   removeAttachDir() {
-    fse.removeSync(getAttachDir())
+    fs.rmdirSync(getAttachDir(), {recursive: true})
   }
 }
 

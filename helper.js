@@ -1,5 +1,5 @@
-const fs = require('fs-extra')
-const path = require('path')
+import * as fs from "fs";
+import * as path from "path";
 
 let tempDir = "./temp";
 const getTempDir = () => tempDir;
@@ -24,18 +24,18 @@ const addAttach = async (attach, description) => {
   const fileName = generateRandomString()
   if (typeof attach === 'string') {
     const attachObject = { testPath, testName, filePath: attach, description }
-    await fs.promises.mkdir(`${tempDir}/data/`,{recursive:true});
-    await fs.writeJSON(`${tempDir}/data/${fileName}.json`, attachObject)
+    await fs.promises.mkdir(`${tempDir}/data/`, {recursive: true});
+    await fs.promises.writeFile(`${tempDir}/data/${fileName}.json`, JSON.stringify(attachObject))
   }
 
   if (Buffer.isBuffer(attach)) {
     const path = `${tempDir}/images/${fileName}.jpg`
     try {
       await fs.promises.mkdir(`${tempDir}/images`,{recursive:true});
-      await fs.promises.mkdir(`${tempDir}/data`,{recursive:true});
-      await fs.writeFile(path, attach)
+      await fs.promises.mkdir(`${tempDir}/data`, {recursive: true});
+      await fs.promises.writeFile(path, attach)
       const attachObject = { testPath, testName, fileName: `${fileName}.jpg`, description }
-      await fs.writeJSON(`${tempDir}/data/${fileName}.json`, attachObject)
+      await fs.promises.writeFile(`${tempDir}/data/${fileName}.json`, JSON.stringify(attachObject))
     } catch (err) {
       console.error(err)
       console.error(`[jest-html-reporters]: Param attach error, can not save as a image, pic ${testName} - ${description} log failed.`)
@@ -61,20 +61,27 @@ const generateRandomString = () => `${Date.now()}${Math.random()}`
 const readAttachInfos = async (publicPath) => {
   const result = {}
   try {
-    await fs.promises.mkdir(`${tempDir}/data`,{recursive:true});
-    await fs.promises.mkdir(`${tempDir}/images`,{recursive:true});
-    const attachData = await fs.readdir(`${tempDir}/data`)
-    const dataList = await Promise.all(attachData.map(data => fs.readJSON(`${tempDir}/data/${data}`, { throws: false })))
+    await fs.promises.mkdir(`${tempDir}/data`, {recursive: true});
+    await fs.promises.mkdir(`${tempDir}/images`, {recursive: true});
+    const attachData = await fs.promises.readdir(`${tempDir}/data`)
+    const dataList = await Promise.all(attachData.map(data =>
+        fs.promises.readFile(`${tempDir}/data/${data}`, {encoding: "utf8"}).then(it => JSON.parse(it))))
     const outPutDir = path.resolve(publicPath, attachDir)
-    const attachFiles = await fs.readdir(`${tempDir}/images`)
+    const attachFiles = await fs.promises.readdir(`${tempDir}/images`)
     console.log(attachFiles, outPutDir)
-    if (attachFiles.length) await fs.copy(`${tempDir}/images`, outPutDir)
+    if (attachFiles.length) {
+      await fs.copy(`${tempDir}/images`, outPutDir)
+    }
 
     dataList.forEach(attachObject => {
-      if (!attachObject) return
+      if (!attachObject) {
+        return
+      }
 
-      const { testPath, testName, filePath, description, fileName } = attachObject
-      if (!result[testPath]) result[testPath] = {}
+      const {testPath, testName, filePath, description, fileName} = attachObject
+      if (!result[testPath]) {
+        result[testPath] = {}
+      }
       if (!result[testPath][testName]) result[testPath][testName] = []
 
       result[testPath][testName].push({

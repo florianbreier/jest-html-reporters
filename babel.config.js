@@ -22,7 +22,8 @@ module.exports = function(api) {
     ['@babel/env', {
       ...envOptions
     }],
-    '@babel/react'
+    '@babel/react',
+      ['@babel/preset-env',{useBuiltIns: ""}]
   ]
 
   return { presets, plugins }

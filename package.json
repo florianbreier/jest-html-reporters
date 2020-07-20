@@ -50,6 +50,7 @@
     "babel-plugin-import-separation": "^1.0.0",
     "clean-webpack-plugin": "^0.1.19",
     "copy-to-clipboard": "^3.0.8",
+    "core-js": "^3.6.5",
     "css-loader": "^1.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
@@ -96,7 +97,5 @@
     "readme.md",
     "dist/index.html"
   ],
-  "dependencies": {
-    "fs-extra": "^9.0.1"
-  }
+  "dependencies": {}
 }
