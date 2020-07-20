@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/Hazyzh/jest-html-reporters#readme",
   "devDependencies": {
+    "@ant-design/icons": "^4.0.6",
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
@@ -83,8 +84,7 @@
     "webpack": "^4.17.1",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.7",
-    "@ant-design/icons": "^4.0.6"
+    "webpack-dev-server": "^3.1.7"
   },
   "files": [
     "index.js",

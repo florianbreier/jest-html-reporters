@@ -1,9 +1,9 @@
 import React from 'react'
-import { Table } from 'antd'
+import {Table} from 'antd'
 import DetailTable from '@/components/DetailTable'
 import ErrorButton from '@/components/ErrorButton'
 
-import { mount } from 'enzyme'
+import {mount} from 'enzyme'
 
 describe('test DetailTable ', () => {
   test('should return antd table component', () => {
@@ -41,7 +41,7 @@ test('Top level test in a file', () => {
 })
 
 describe('Nested describes', () => {
-  test('Tope level test in a describe should be prepended by describe name', () => {
+  test('Top level test in a describe should be prepended by describe name', () => {
     const describeTitle = 'Nested describes'
     const title = 'top level describe test'
     const mockProps = {
