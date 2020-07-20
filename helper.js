@@ -1,8 +1,13 @@
 const fs = require('fs-extra')
-const dataDirPath = './temp/data'
-const attachDirPath = './temp/images'
-const distDirName = './jest-html-reporters-attach'
 const path = require('path')
+
+let tempDir = "./temp";
+const getTempDir = () => tempDir;
+const setTempDir = (val) => tempDir = val || tempDir;
+
+let attachDir = "./jest-html-reporters-attach";
+const getAttachDir = () => attachDir;
+const setAttachDir = (val) => attachDir = val || attachDir;
 
 /**
  *
@@ -10,7 +15,7 @@ const path = require('path')
  * @param {string} description
  */
 const addAttach = async (attach, description) => {
-  const { testPath, testName } = getJestGlobalData()
+  const {testPath, testName} = getJestGlobalData()
   // type check
   if (typeof attach !== 'string' && !Buffer.isBuffer(attach)) {
     console.error(`[jest-html-reporters]: Param attach error, not a buffer or string, pic ${testName} - ${description} log failed.`)
@@ -19,15 +24,18 @@ const addAttach = async (attach, description) => {
   const fileName = generateRandomString()
   if (typeof attach === 'string') {
     const attachObject = { testPath, testName, filePath: attach, description }
-    await fs.writeJSON(`${dataDirPath}/${fileName}.json`, attachObject)
+    await fs.promises.mkdir(`${tempDir}/data/`,{recursive:true});
+    await fs.writeJSON(`${tempDir}/data/${fileName}.json`, attachObject)
   }
 
   if (Buffer.isBuffer(attach)) {
-    const path = `${attachDirPath}/${fileName}.jpg`
+    const path = `${tempDir}/images/${fileName}.jpg`
     try {
+      await fs.promises.mkdir(`${tempDir}/images`,{recursive:true});
+      await fs.promises.mkdir(`${tempDir}/data`,{recursive:true});
       await fs.writeFile(path, attach)
       const attachObject = { testPath, testName, fileName: `${fileName}.jpg`, description }
-      await fs.writeJSON(`${dataDirPath}/${fileName}.json`, attachObject)
+      await fs.writeJSON(`${tempDir}/data/${fileName}.json`, attachObject)
     } catch (err) {
       console.error(err)
       console.error(`[jest-html-reporters]: Param attach error, can not save as a image, pic ${testName} - ${description} log failed.`)
@@ -53,12 +61,14 @@ const generateRandomString = () => `${Date.now()}${Math.random()}`
 const readAttachInfos = async (publicPath) => {
   const result = {}
   try {
-    const attachData = await fs.readdir(dataDirPath)
-    const dataList = await Promise.all(attachData.map(data => fs.readJSON(`${dataDirPath}/${data}`, { throws: false })))
-    const outPutDir = path.resolve(publicPath, distDirName)
-    const attachFiles = await fs.readdir(attachDirPath)
+    await fs.promises.mkdir(`${tempDir}/data`,{recursive:true});
+    await fs.promises.mkdir(`${tempDir}/images`,{recursive:true});
+    const attachData = await fs.readdir(`${tempDir}/data`)
+    const dataList = await Promise.all(attachData.map(data => fs.readJSON(`${tempDir}/data/${data}`, { throws: false })))
+    const outPutDir = path.resolve(publicPath, attachDir)
+    const attachFiles = await fs.readdir(`${tempDir}/images`)
     console.log(attachFiles, outPutDir)
-    if (attachFiles.length) await fs.copy(attachDirPath, outPutDir)
+    if (attachFiles.length) await fs.copy(`${tempDir}/images`, outPutDir)
 
     dataList.forEach(attachObject => {
       if (!attachObject) return
@@ -68,7 +78,7 @@ const readAttachInfos = async (publicPath) => {
       if (!result[testPath][testName]) result[testPath][testName] = []
 
       result[testPath][testName].push({
-        filePath: fileName ? path.resolve(outPutDir, fileName) : filePath,
+        filePath: fileName ? path.join(attachDir, fileName) : filePath,
         description,
       })
     })
@@ -80,10 +90,12 @@ const readAttachInfos = async (publicPath) => {
   return result
 }
 
+
 module.exports = {
   addAttach,
   readAttachInfos,
-  dataDirPath,
-  attachDirPath,
-  distDirName,
+  getTempDir,
+  setTempDir,
+  getAttachDir,
+  setAttachDir,
 }

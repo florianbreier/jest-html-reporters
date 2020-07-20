@@ -2,7 +2,7 @@ const fs = require('fs')
 const fse = require('fs-extra')
 
 const path = require('path')
-const { dataDirPath, attachDirPath, distDirName, readAttachInfos } = require('./helper')
+const {getAttachDir, setAttachDir,getTempDir,setTempDir, readAttachInfos} = require('./helper')
 const localTemplatePath = path.resolve(__dirname, './dist/index.html')
 
 function mkdirs(dirpath) {
@@ -56,8 +56,7 @@ class MyCustomReporter {
     results.config = this._globalConfig
     results.endTime = Date.now()
     results._reporterOptions = { ...this._options, logoImg, customInfos }
-    const attachInfos = await readAttachInfos(publicPath)
-    results.attachInfos = attachInfos
+    results.attachInfos = await readAttachInfos(publicPath)
     fs.existsSync(publicPath) === false && publicPath && mkdirs(publicPath)
 
     const data = JSON.stringify(results)
@@ -65,29 +64,31 @@ class MyCustomReporter {
     // fs.writeFileSync('./src/devMock.json', data)
     const htmlTemplate = fs.readFileSync(localTemplatePath, 'utf-8')
     const outPutContext = htmlTemplate
-      .replace('$resultData', JSON.stringify(data))
+        .replace('$resultData', JSON.stringify(data))
     fs.writeFileSync(filePath, outPutContext, 'utf-8')
     this.removeTempDir()
     console.log('📦 reporter is created on:', filePath)
   }
 
   init() {
+    setTempDir(this._options.tempDir);
+    setAttachDir(this._options.attachDir);
     this.initAttachDir()
   }
 
   initAttachDir() {
     this.removeTempDir()
     this.removeAttachDir()
-    fse.mkdirpSync(dataDirPath)
-    fse.mkdirpSync(attachDirPath)
+    fse.mkdirpSync(getTempDir())
+    fse.mkdirpSync(getAttachDir())
   }
 
   removeTempDir() {
-    fse.removeSync('./temp')
+    fse.removeSync(getTempDir())
   }
 
   removeAttachDir() {
-    fse.removeSync(path.resolve(this._options.publicPath || process.cwd(), distDirName))
+    fse.removeSync(getAttachDir())
   }
 }
 
