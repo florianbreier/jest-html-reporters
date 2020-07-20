@@ -1,7 +1,7 @@
 const fs = require("fs");
-
 const path = require('path')
-const {getAttachDir, setAttachDir,getTempDir,setTempDir, readAttachInfos} = require('./helper')
+const {addAttach, getAttachDir, setAttachDir, getTempDir, setTempDir, readAttachInfos} = require('./helper')
+
 const localTemplatePath = path.resolve(__dirname, './dist/index.html')
 
 function mkdirs(dirpath) {
@@ -37,7 +37,7 @@ const getCustomInfosFromEnv = () => {
 }
 
 // my-custom-reporter.js
-class MyCustomReporter {
+class Reporter {
   constructor(globalConfig, options) {
     this._globalConfig = globalConfig
     this._options = options
@@ -91,4 +91,5 @@ class MyCustomReporter {
   }
 }
 
-module.exports = MyCustomReporter
+Reporter.addAttach = addAttach;
+module.exports = Reporter
