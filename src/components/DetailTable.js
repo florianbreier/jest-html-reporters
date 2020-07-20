@@ -1,33 +1,28 @@
-import React, { useState } from 'react'
-import { Table, Tooltip, Checkbox, InputNumber } from 'antd'
-import {
-  CheckOutlined,
-  Loading3QuartersOutlined,
-  CloseOutlined,
-  PushpinOutlined
-} from '@ant-design/icons'
-import { getRecordClass, renderRootRowClass, getFormatTime, formatCollapsableData } from '@/untils'
+import React, {useState} from 'react'
+import {Checkbox, InputNumber, Table, Tooltip} from 'antd'
+import {CheckOutlined, CloseOutlined, Loading3QuartersOutlined, PushpinOutlined} from '@ant-design/icons'
+import {formatCollapsableData, getFormatTime, getRecordClass, renderRootRowClass} from '@/untils'
 import ErrorButton from './ErrorButton'
-import { renderStatus as parentRowRenderStatus } from './Table'
+import {renderStatus as parentRowRenderStatus} from './Table'
 
-const renderStatus = ({ status }) => {
+const renderStatus = ({status}) => {
   let info
   switch (status) {
     case 'passed':
-      info = <span style={{ color: 'green' }} >
-        <CheckOutlined />
+      info = <span style={{color: 'green'}}>
+        <CheckOutlined/>
         <span className='detail_status_text'>{status}</span>
       </span>
       break
     case 'pending':
-      info = <span style={{ color: '#faad14' }} >
-        <Loading3QuartersOutlined />
+      info = <span style={{color: '#faad14'}}>
+        <Loading3QuartersOutlined/>
         <span className='detail_status_text'>{status}</span>
       </span>
       break
     case 'failed' :
-      info = <span style={{ color: '#fafafa' }} >
-        <CloseOutlined />
+      info = <span style={{color: '#fafafa'}}>
+        <CloseOutlined/>
         <span className='detail_status_text'>{status}</span>
       </span>
       break
@@ -79,7 +74,8 @@ const columns = [
     width: '100px',
     title: 'action',
     key: 'operation',
-    render: ({ failureMessages, fullName, fileAttachInfos, subGroups }) => !subGroups && <ErrorButton caseAttachInfos={fileAttachInfos[fullName]} failureMessage={failureMessages[0]} />
+    render: ({failureMessages = [], fullName, fileAttachInfos = {}, subGroups}) => !subGroups &&
+        <ErrorButton caseAttachInfos={fileAttachInfos[fullName]} failureMessage={failureMessages[0]}/>
   }
 ]
 
@@ -94,17 +90,17 @@ const DetailTable = ({ data }) =>
     columns={columns}
     pagination={false} />
 
-const RootTable = ({ data }) => {
+const RootTable = ({data = []}) => {
   const [isMergence, setIsMergence] = useState(false)
   const [mergeLevel, setMergeLevel] = useState(1)
 
   return (
-    <div>
-      {data.length > 8 && (
-        <div className='merge-box'>
-          <Checkbox checked={isMergence} onChange={e => setIsMergence(e.target.checked)}>
-            Merge Data
-          </Checkbox>
+      <div>
+        {data.length > 8 && (
+            <div className='merge-box'>
+              <Checkbox checked={isMergence} onChange={e => setIsMergence(e.target.checked)}>
+                Merge Data
+              </Checkbox>
           {isMergence && (
             <span>| Merge Level: <InputNumber size='small' min={1} max={10} value={mergeLevel} onChange={setMergeLevel} /></span>
           )}
