@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as path from "path";
+const fs = require("fs");
+const path = require("path");
 
 let tempDir = "./temp";
 const getTempDir = () => tempDir;
