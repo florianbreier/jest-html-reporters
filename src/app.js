@@ -45,7 +45,7 @@ class App extends Component {
 
   render() {
     const { hideIcon, pageTitle = defaultTitle } = data._reporterOptions
-    const IconComp = hideIcon ? null : <a target='_blank' className='icon' href='https://github.com/Hazyzh/jest-html-reporters'><GithubFilled /></a>
+    const IconComp = hideIcon ? null : <a target='_blank' className='icon' href='https://github.com/florianbreier/jest-html-reporters'><GithubFilled /></a>
     return (
       <Provider value={this.state}>
         <Layout className='layout'>
