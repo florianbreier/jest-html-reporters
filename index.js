@@ -65,27 +65,26 @@ class Reporter {
     const outPutContext = htmlTemplate
         .replace('$resultData', JSON.stringify(data))
     fs.writeFileSync(filePath, outPutContext, 'utf-8')
-    this.removeTempDir()
+    this.removeDir(getTempDir())
     console.log('📦 reporter is created on:', filePath)
   }
 
   init() {
     setTempDir(this._options.tempDir);
     setAttachDir(this._options.attachDir);
-    this.initAttachDir()
+    this.initDirs()
   }
 
-  initAttachDir() {
-    this.removeTempDir()
-    this.removeAttachDir()
+  initDirs() {
+    this.removeDir(getTempDir());
+    this.removeDir(getAttachDir());
+    this.removeDir(this._options.publicPath || process.cwd());
   }
 
-  removeTempDir() {
-    fs.rmdirSync(getTempDir(), {recursive: true})
-  }
-
-  removeAttachDir() {
-    fs.rmdirSync(getAttachDir(), {recursive: true})
+  removeDir(dir) {
+    if (fs.existsSync(dir)) {
+      fs.rmdirSync(dir, {recursive: true});
+    }
   }
 }
 
