@@ -1,5 +1,5 @@
 declare module "@florianbreier/jest-html-reporters" {
-    export function addAttach(attach: Buffer | string, description: string);
+    export function addAttach(attach: Buffer | string, description: string, testPath?: string, testName?: string);
 
     export default class {
         public constructor(globalConfig, options);

@@ -78,8 +78,6 @@ class Reporter {
   initAttachDir() {
     this.removeTempDir()
     this.removeAttachDir()
-    fs.mkdirSync(getTempDir(), {recursive: true})
-    fs.mkdirSync(getAttachDir(), {recursive: true})
   }
 
   removeTempDir() {
