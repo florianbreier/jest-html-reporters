@@ -15,6 +15,7 @@ class HomePage extends Component {
   state = {
     ...window.realData,
     globalExpandState: window.realData._reporterOptions.expand || false,
+    mergeLevel: window.realData._reporterOptions.mergeLevel || 1,
   }
   render () {
     const { customInfos } = window.realData._reporterOptions

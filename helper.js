@@ -18,7 +18,15 @@ const addAttach = async (attach, description, testPath, testName) => {
         console.error(`[jest-html-reporters]: Param attach error, not a buffer or string, pic ${testName} - ${description} log failed.`)
         return
     }
-    const fileName = generateRandomString()
+    let fileName = testName || "";
+    fileName += fileName ? "_" : "";
+    fileName += description || "";
+    fileName = fileName || generateRandomString();
+    fileName = fileName.replace(/[ |:*?<>]/g, "_").replace(/\\/g, "/");
+    if (fs.existsSync(`${tempDir}/data/${fileName}.json`)) {
+        fileName += "_" + generateRandomString();
+    }
+
     if (typeof attach === 'string') {
         const attachObject = {testPath, testName, filePath: attach, description}
         await fs.promises.mkdir(`${tempDir}/data/`, {recursive: true});
