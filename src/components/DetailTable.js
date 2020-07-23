@@ -91,8 +91,8 @@ const DetailTable = ({ data }) =>
     pagination={false} />
 
 const RootTable = ({data = []}) => {
-  const [isMergence, setIsMergence] = useState(false)
-  const [mergeLevel, setMergeLevel] = useState(1)
+  const [isMergence, setIsMergence] = useState(true)
+  const [mergeLevel, setMergeLevel] = useState(2)
 
   return (
       <div>

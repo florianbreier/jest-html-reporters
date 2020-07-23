@@ -16,11 +16,11 @@ describe('test footer reporter info', () => {
     expect(aLinks.length).toBe(2)
 
     const AboutLink = aLinks.get(0)
-    expect(AboutLink.props.href).toEqual('https://github.com/Hazyzh/jest-html-reporters')
+    expect(AboutLink.props.href).toEqual('https://github.com/florianbreier/jest-html-reporters')
     expect(AboutLink.props.children).toEqual('About')
 
     const FeedbackLink = aLinks.get(1)
-    expect(FeedbackLink.props.href).toEqual('https://github.com/Hazyzh/jest-html-reporters/issues')
+    expect(FeedbackLink.props.href).toEqual('https://github.com/florianbreier/jest-html-reporters/issues')
     expect(FeedbackLink.props.children).toEqual('Feedback')
   })
   test('there should have bottom line box', () => {

@@ -18,9 +18,9 @@ function info(data, caseAttachInfos) {
         </Col>
         {!!caseAttachInfos.length && (
           <List
-            header='Attach'
+            header='Attachments'
             bordered
-            grid={{ gutter: 16, column: 2 }}
+            grid={{ gutter: 16, column: 1 }}
             dataSource={caseAttachInfos}
             renderItem={item => (
               <List.Item>

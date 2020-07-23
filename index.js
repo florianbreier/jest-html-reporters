@@ -1,8 +1,7 @@
-const fs = require('fs')
-const fse = require('fs-extra')
-
+const fs = require("fs");
 const path = require('path')
-const { dataDirPath, attachDirPath, distDirName, readAttachInfos } = require('./helper')
+const {addAttach, getAttachDir, setAttachDir, getTempDir, setTempDir, readAttachInfos} = require('./helper')
+
 const localTemplatePath = path.resolve(__dirname, './dist/index.html')
 
 function mkdirs(dirpath) {
@@ -38,7 +37,7 @@ const getCustomInfosFromEnv = () => {
 }
 
 // my-custom-reporter.js
-class MyCustomReporter {
+class Reporter {
   constructor(globalConfig, options) {
     this._globalConfig = globalConfig
     this._options = options
@@ -56,8 +55,7 @@ class MyCustomReporter {
     results.config = this._globalConfig
     results.endTime = Date.now()
     results._reporterOptions = { ...this._options, logoImg, customInfos }
-    const attachInfos = await readAttachInfos(publicPath)
-    results.attachInfos = attachInfos
+    results.attachInfos = await readAttachInfos(publicPath)
     fs.existsSync(publicPath) === false && publicPath && mkdirs(publicPath)
 
     const data = JSON.stringify(results)
@@ -65,30 +63,30 @@ class MyCustomReporter {
     // fs.writeFileSync('./src/devMock.json', data)
     const htmlTemplate = fs.readFileSync(localTemplatePath, 'utf-8')
     const outPutContext = htmlTemplate
-      .replace('$resultData', JSON.stringify(data))
+        .replace('$resultData', JSON.stringify(data))
     fs.writeFileSync(filePath, outPutContext, 'utf-8')
-    this.removeTempDir()
+    this.removeDir(getTempDir())
     console.log('📦 reporter is created on:', filePath)
   }
 
   init() {
-    this.initAttachDir()
+    setTempDir(this._options.tempDir);
+    setAttachDir(this._options.attachDir);
+    this.initDirs()
   }
 
-  initAttachDir() {
-    this.removeTempDir()
-    this.removeAttachDir()
-    fse.mkdirpSync(dataDirPath)
-    fse.mkdirpSync(attachDirPath)
+  initDirs() {
+    this.removeDir(getTempDir());
+    this.removeDir(getAttachDir());
+    this.removeDir(this._options.publicPath || process.cwd());
   }
 
-  removeTempDir() {
-    fse.removeSync('./temp')
-  }
-
-  removeAttachDir() {
-    fse.removeSync(path.resolve(this._options.publicPath || process.cwd(), distDirName))
+  removeDir(dir) {
+    if (fs.existsSync(dir)) {
+      fs.rmdirSync(dir, {recursive: true});
+    }
   }
 }
 
-module.exports = MyCustomReporter
+Reporter.addAttach = addAttach;
+module.exports = Reporter
