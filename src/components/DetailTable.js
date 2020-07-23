@@ -90,9 +90,9 @@ const DetailTable = ({ data }) =>
     columns={columns}
     pagination={false} />
 
-const RootTable = ({data = []}) => {
-  const [isMergence, setIsMergence] = useState(true)
-  const [mergeLevel, setMergeLevel] = useState(2)
+const RootTable = ({data = [], mergeLevel = 1}) => {
+  const [isMergence, setIsMergence] = useState(mergeLevel > 1)
+  const [currentMergeLevel, setMergeLevel] = useState(mergeLevel)
 
   return (
       <div>
@@ -102,7 +102,7 @@ const RootTable = ({data = []}) => {
                 Merge Data
               </Checkbox>
           {isMergence && (
-            <span>| Merge Level: <InputNumber size='small' min={1} max={10} value={mergeLevel} onChange={setMergeLevel} /></span>
+            <span>| Merge Level: <InputNumber size='small' min={1} max={10} value={currentMergeLevel} onChange={setMergeLevel} /></span>
           )}
         </div>
       )}
@@ -119,7 +119,7 @@ const RootTable = ({data = []}) => {
         rowClassName={({ status, subGroups, ...rest }, index) => subGroups
           ? renderRootRowClass({ ...rest }) : getRecordClass(status, index)
         }
-        dataSource={isMergence ? formatCollapsableData(data, mergeLevel) : data}
+        dataSource={isMergence ? formatCollapsableData(data, currentMergeLevel) : data}
         columns={columns}
         pagination={false} />
     </div>
