@@ -32,9 +32,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Check out
+        uses: actions/checkout@v2
       - id: bumpVersion
         name: Version bump
         uses: florianbreier/gh-action-bump-version@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       output:  ${{ steps.bumpVersion.outputs.output }}
 
@@ -43,8 +47,10 @@ jobs:
     if: ${{ needs.versionBump.outputs.output == 'No action necessary' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Check out
+        uses: actions/checkout@v2
+      - name: Set up Node.js 12
+        uses: actions/setup-node@v1
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
