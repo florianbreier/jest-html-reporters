@@ -1,6 +1,6 @@
 {
   "name": "@florianbreier/jest-html-reporters",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "index.js",
   "scripts": {
