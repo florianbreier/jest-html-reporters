@@ -36,15 +36,12 @@ jobs:
         uses: actions/checkout@v2
       - id: bumpVersion
         name: Version bump
-        uses: florianbreier/gh-action-bump-version@master
+        uses: phips28/gh-action-bump-version@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    outputs:
-      output:  ${{ steps.bumpVersion.outputs.output }}
 
   publish-npm:
     needs: versionBump
-    if: ${{ needs.versionBump.outputs.output == 'No action necessary' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out
