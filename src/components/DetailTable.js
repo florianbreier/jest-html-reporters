@@ -41,14 +41,14 @@ const renderTime = ({
   subGroups
 }) => !subGroups && getFormatTime(0, duration)
 
-const MAX_TITLE_LENGTH = 85
-const renderTitleContent = (title = '') => {
-  const len = title.length
-  if (len > MAX_TITLE_LENGTH) {
-    return title.substr(0, 85) + '...'
-  }
-  return title
-}
+//const MAX_TITLE_LENGTH = 85
+//const renderTitleContent = (title = '') => {
+//  const len = title.length
+//  if (len > MAX_TITLE_LENGTH) {
+//    return title.substr(0, 85) + '...'
+//  }
+//  return title
+//}
 
 const renderTitle = ({ ancestorTitles = [], subGroups, subTitle, title, fullName }) => {
   const sep = ' > '
@@ -57,7 +57,7 @@ const renderTitle = ({ ancestorTitles = [], subGroups, subTitle, title, fullName
 
   return (
     <Tooltip overlayStyle={{ maxWidth: '800px' }} title={tooltip}>
-      <span className='inner_path_text'>{renderTitleContent(nestedTitle)}</span>
+      <span className='inner_path_text'>{nestedTitle}</span>
     </Tooltip>
   )
 }
@@ -75,7 +75,7 @@ const columns = [
     title: 'action',
     key: 'operation',
     render: ({failureMessages = [], fullName, fileAttachInfos = {}, subGroups}) => !subGroups &&
-        <ErrorButton caseAttachInfos={fileAttachInfos[fullName]} failureMessage={failureMessages[0]}/>
+        <ErrorButton fullName={fullName} caseAttachInfos={fileAttachInfos[fullName]} failureMessage={failureMessages[0]}/>
   }
 ]
 
