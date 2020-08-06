@@ -22,7 +22,7 @@ const addAttach = async (attach, description, testPath, testName) => {
     fileName += fileName ? "_" : "";
     fileName += description || "";
     fileName = fileName || generateRandomString();
-    fileName = fileName.replace(/[ |:*?<>]/g, "_").replace(/\\/g, "/");
+    fileName = fileName.replace(/[\s|:*?<>\/\\]/g, "_");
     if (fs.existsSync(`${tempDir}/data/${fileName}.json`)) {
         fileName += "_" + generateRandomString();
     }
