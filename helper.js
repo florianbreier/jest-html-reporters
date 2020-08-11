@@ -23,28 +23,33 @@ const addAttach = async (attach, description, testPath, testName) => {
     fileName += description || "";
     fileName = fileName || generateRandomString();
     fileName = fileName.replace(/[\s|:*?<>\/\\]/g, "_");
+    const pathLength = `${tempDir}/images/.jpg`.length;
+    const MAX_PATH_LENGTH = 255;
+    if (fileName.length + pathLength > MAX_PATH_LENGTH) {
+        fileName = fileName.substr(fileName.length + pathLength - MAX_PATH_LENGTH);
+    }
     if (fs.existsSync(`${tempDir}/data/${fileName}.json`)) {
         fileName += "_" + generateRandomString();
     }
 
-    if (typeof attach === 'string') {
-        const attachObject = {testPath, testName, filePath: attach, description}
-        await fs.promises.mkdir(`${tempDir}/data/`, {recursive: true});
-        await fs.promises.writeFile(`${tempDir}/data/${fileName}.json`, JSON.stringify(attachObject))
-    }
+    try {
+        if (typeof attach === 'string') {
+            const attachObject = {testPath, testName, filePath: attach, description}
+            await fs.promises.mkdir(`${tempDir}/data/`, {recursive: true});
+            await fs.promises.writeFile(`${tempDir}/data/${fileName}.json`, JSON.stringify(attachObject))
+        }
 
-    if (Buffer.isBuffer(attach)) {
-        const path = `${tempDir}/images/${fileName}.jpg`
-        try {
+        if (Buffer.isBuffer(attach)) {
+            const path = `${tempDir}/images/${fileName}.jpg`
             await fs.promises.mkdir(`${tempDir}/images`, {recursive: true});
             await fs.promises.mkdir(`${tempDir}/data`, {recursive: true});
             await fs.promises.writeFile(path, attach)
             const attachObject = {testPath, testName, fileName: `${fileName}.jpg`, description}
             await fs.promises.writeFile(`${tempDir}/data/${fileName}.json`, JSON.stringify(attachObject))
-        } catch (err) {
-            console.error(err)
-            console.error(`[jest-html-reporters]: Param attach error, can not save as a image, pic ${testName} - ${description} log failed.`)
         }
+    } catch (err) {
+        console.error(err)
+        console.error(`[jest-html-reporters]: Param attach error, can not save as a image, pic ${testName} - ${description} log failed.`)
     }
 }
 
@@ -61,7 +66,7 @@ const getJestGlobalData = () => {
     return {testPath, testName: currentTestName}
 }
 
-const generateRandomString = () => `${Date.now()}${Math.random()}`
+const generateRandomString = () => Math.random().toString(36).substr(2, 5);
 
 const readAttachInfos = async (publicPath) => {
     const result = {}
