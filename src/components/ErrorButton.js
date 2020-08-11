@@ -1,24 +1,23 @@
-
 import React from 'react'
-import { Row, Col, Modal, List, Card } from 'antd'
-import { ExclamationCircleFilled } from '@ant-design/icons'
+import {Card, Col, List, Modal, Row} from 'antd'
+import {ExclamationCircleFilled} from '@ant-design/icons'
 import ErrorInfoItem from './ErrorInfoItem'
 
-const { Meta } = Card
+const {Meta} = Card
 
-function info(data, caseAttachInfos) {
+function info(title = 'Case Infos', data, caseAttachInfos) {
   Modal.warning({
-    title: 'Case Infos',
+    title,
     width: '80%',
     maskClosable: true,
     content: (
-      <Row>
-        <Col span={24}>
-          <ErrorInfoItem data={data} caseAttachInfos={caseAttachInfos} />
-        </Col>
-        {!!caseAttachInfos.length && (
-          <List
-            header='Attachments'
+        <Row>
+          <Col span={24}>
+            <ErrorInfoItem data={data} caseAttachInfos={caseAttachInfos}/>
+          </Col>
+          {!!caseAttachInfos.length && (
+              <List
+                  header='Attachments'
             bordered
             grid={{ gutter: 16, column: 1 }}
             dataSource={caseAttachInfos}
@@ -41,14 +40,15 @@ function info(data, caseAttachInfos) {
   })
 }
 
-const ErrorButton = ({ failureMessage, caseAttachInfos = [] }) => {
-  if (!failureMessage && !caseAttachInfos.length) return null
+const ErrorButton = ({fullName, failureMessage, caseAttachInfos = []}) => {
+  if (!failureMessage && !caseAttachInfos.length) {
+    return null
+  }
   return <div
-    className='error_button'
-    onClick={() => info(failureMessage, caseAttachInfos)}>
-    <ExclamationCircleFilled />
-    Info
-  </div>
+      className='error_button' onClick={() => info(fullName, failureMessage, caseAttachInfos)}
+  >
+    <ExclamationCircleFilled/>
+    Info </div>
 }
 
 export default ErrorButton
